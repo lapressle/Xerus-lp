@@ -14,3 +14,4 @@ mongomock~=4.0
 optimade~=0.16
 streamlit
 streamlit-aggrid
+xylib-py
