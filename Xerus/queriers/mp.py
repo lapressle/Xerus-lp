@@ -22,6 +22,7 @@ import os
 import sys
 from pathlib import Path
 import pymatgen
+from mp_api.client import MPRester
 from pymatgen.io.cif import CifWriter
 from Xerus.utils.cifutils import make_combinations
 from Xerus.settings.settings import MP_API_KEY
@@ -76,10 +77,10 @@ def querymp(inc_eles: List[str], exc_eles: List = [], max_num_elem:int = 3, api_
     -------
     Returns a DataFrame with the queried data information with data is available for elements combination.
     '''
-    a = pymatgen.MPRester(api_key)
+    a = MPRester(api_key)
     if not combination:
         qp = {"elements": {"$all": inc_eles, "$nin": exc_eles}, "nelements": {"$lte": max_num_elem}}
-        data = a.query(qp, ['pretty_formula', 'structure', 'theoretical', 'material_id', 'e_above_hull'])
+        data = a.summary.search(qp, ['pretty_formula', 'structure', 'theoretical', 'material_id', 'e_above_hull'])
         if len(data) > 0:
             data = pd.DataFrame.from_dict(data)
             data = data[~data.theoretical]
@@ -91,7 +92,7 @@ def querymp(inc_eles: List[str], exc_eles: List = [], max_num_elem:int = 3, api_
         for comb in combations_flat:
             print('Getting data for the following atoms combinations: {}'.format('-'.join(comb)))
             qp = {"elements": {"$all": comb, "$nin": exc_eles}, "nelements": {"$lte": len(comb)}}
-            data = a.query(qp, ['pretty_formula', 'structure', 'theoretical', 'material_id', 'e_above_hull'])
+            data = a.summary.search(qp, ['pretty_formula', 'structure', 'theoretical', 'material_id', 'e_above_hull'])
             if len(data) > 0:
                 data = pd.DataFrame.from_dict(data)
                 data = data[~data.theoretical]
