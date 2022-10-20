@@ -4,7 +4,7 @@ h5py>=2.10.0
 matplotlib==3.3.4
 seaborn==0.11.2
 scipy>=1.5.3
-pymatgen==2020.1.28
+pymatgen
 numpy>=1.2.0
 pymongo<4
 optuna==2.4.0
@@ -15,3 +15,4 @@ optimade~=0.16
 streamlit
 streamlit-aggrid
 xylib-py
+mp-api
